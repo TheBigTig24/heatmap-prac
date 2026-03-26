@@ -1,0 +1,21 @@
+.main-cont {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: lightgreen;
+}
+
+.interactables-cont {
+    display: flex;
+    flex-direction: row;
+}
+
+.heatmap {
+    width: 800px;
+    height: 600px;
+    border: 1px solid black;
+    background-color: white;
+}
