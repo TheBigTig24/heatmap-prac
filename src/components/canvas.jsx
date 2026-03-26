@@ -24,7 +24,7 @@ const Canvas = forwardRef((props, ref) => {
     ctx.moveTo(offsetX, offsetY);
     setIsDrawing(true);
 
-    setPoints(prev => [...prev, { x: offsetX, y: offsetY}]);
+    setPoints(prev => [...prev, { x: offsetX, y: offsetY, timestamp: Date.now()}]);
   };
 
   const draw = ({ nativeEvent }) => {
@@ -41,7 +41,7 @@ const Canvas = forwardRef((props, ref) => {
       const dist = lastPoint ? Math.sqrt((offsetX - lastPoint.x)**2 + (offsetY - lastPoint.y)**2) : 0;
       
       if (dist > 2) { // Only add if mouse moved 2+ pixels
-        return [...prev, { x: offsetX, y: offsetY }];
+        return [...prev, { x: offsetX, y: offsetY, timestamp: Date.now() }];
       }
       return prev;
     });
@@ -67,8 +67,8 @@ const Canvas = forwardRef((props, ref) => {
   return (
     <canvas
       ref={canvasRef}
-      width={800}
-      height={600}
+      width={700}
+      height={500}
       style={{ border: '1px solid #000', cursor: 'crosshair', backgroundColor: "white" }}
       onMouseDown={startDrawing}
       onMouseMove={draw}
