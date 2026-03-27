@@ -8,6 +8,9 @@ const Main = () => {
     const heatmapInstance = useRef(null);
     const heatmapContainerRef = useRef(null);
 
+    const [showWordScreen, setShowWordScreen] = useState(true);
+    const [word, setWord] = useState('stuff');
+
     useEffect(() => {
         if (window.h337) {
             heatmapInstance.current = h337.create({
@@ -57,16 +60,24 @@ const Main = () => {
 
     return (<>
         <div className="main-cont">
-            <h1>Google QuickDraw Clone</h1>
-            <div className="interactables-cont">
-                <Canvas ref={canvasRemoteControl}/>
-                <div ref={heatmapContainerRef} className="heatmap">
-
-                </div>
+            <div className={`show-word-screen ${showWordScreen ? 'active' : null}`}>
+                <h1>Your word is:</h1>
+                <h1>{word}</h1>
+                <button onClick={() => setShowWordScreen(!setShowWordScreen)} className="start-draw">Draw!</button>
             </div>
-            <div className="button-cont">
-                <button onClick={handleClearReq}>Clear<i className="fa-solid fa-eraser"></i></button>
-                <button onClick={updateHeatmap}>Update Heatmap<i className="fa-solid fa-fire"></i></button>
+            <div className="main-inner-cont">
+                <h1>Google QuickDraw Clone</h1>
+                <div className="interactables-cont">
+                    <Canvas ref={canvasRemoteControl}/>
+                    <div ref={heatmapContainerRef} className="heatmap">
+
+                    </div>
+                </div>
+                <div className="button-cont">
+                    <button onClick={handleClearReq}>Clear<i className="fa-solid fa-eraser"></i></button>
+                    <button>Submit</button>
+                    <button onClick={updateHeatmap}>Update Heatmap<i className="fa-solid fa-fire"></i></button>
+                </div>
             </div>
         </div>
     </>)

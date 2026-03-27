@@ -8,6 +8,16 @@
     background-color: lightgreen;
 }
 
+.main-inner-cont {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: lightgreen;
+}
+
 .interactables-cont {
     display: flex;
     flex-direction: row;
@@ -40,4 +50,43 @@
 .button-cont button:hover {
     background-color: lightblue;
     color: black;
+}
+
+.heatmap canvas {
+    z-index: 1;
+}
+
+/* SHOW WORD SCREEN */
+.show-word-screen {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: rgba(100, 200, 200, 0.6);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    transition: bottom 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    bottom: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+
+.show-word-screen.active {
+    bottom: 0vh;
+}
+
+.start-draw {
+    width: 200px;
+    height: 50px;
+    background-color: gold;
+    border: 2px solid white;
+    border-radius: 5px;
+    font-size: 24px;
+    font-family: sans-serif;
+}
+
+.start-draw:hover {
+    background-color: goldenrod;
 }
