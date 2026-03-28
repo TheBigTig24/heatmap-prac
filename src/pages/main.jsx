@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import Canvas from "../components/canvas";
 import "../styles/main.css";
+import Words from "../assets/words/words.jsx";
 
 const Main = () => {
 
@@ -9,9 +10,12 @@ const Main = () => {
     const heatmapContainerRef = useRef(null);
 
     const [showWordScreen, setShowWordScreen] = useState(true);
-    const [word, setWord] = useState('stuff');
+    const [word, setWord] = useState('');
 
     useEffect(() => {
+        let idx = Math.floor(Math.random() * (Words.length + 1));
+        setWord(Words[idx]);
+
         if (window.h337) {
             heatmapInstance.current = h337.create({
                 container: heatmapContainerRef.current,
@@ -58,12 +62,25 @@ const Main = () => {
         return [];
     }
 
+    const handleSubmit = () => {
+        // show to model
+
+        // show next word
+        let idx = Math.floor(Math.random() * (Words.length + 1));
+        while (Words[idx] == word) {
+            idx = Math.floor(Math.random() * (Words.length + 1));
+        }
+        setWord(Words[idx]);
+        setShowWordScreen(true);
+
+    }
+
     return (<>
         <div className="main-cont">
             <div className={`show-word-screen ${showWordScreen ? 'active' : null}`}>
                 <h1>Your word is:</h1>
-                <h1>{word}</h1>
-                <button onClick={() => setShowWordScreen(!setShowWordScreen)} className="start-draw">Draw!</button>
+                <h1 style={{color: "red"}}>{word}</h1>
+                <button onClick={() => setShowWordScreen(false)} className="start-draw">Draw!</button>
             </div>
             <div className="main-inner-cont">
                 <h1>Google QuickDraw Clone</h1>
@@ -75,7 +92,7 @@ const Main = () => {
                 </div>
                 <div className="button-cont">
                     <button onClick={handleClearReq}>Clear<i className="fa-solid fa-eraser"></i></button>
-                    <button>Submit</button>
+                    <button onClick={handleSubmit}>Submit</button>
                     <button onClick={updateHeatmap}>Update Heatmap<i className="fa-solid fa-fire"></i></button>
                 </div>
             </div>

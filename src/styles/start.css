@@ -1,7 +1,7 @@
 .start-screen {
     width: 100vw;
     height: 100vh;
-    background-color: rgba(100, 200, 200, 0.6);
+    background-color: rgba(100, 200, 200, .95);
     z-index: 100;
     position: fixed;
     -webkit-backdrop-filter: blur(5px);
