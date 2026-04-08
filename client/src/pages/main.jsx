@@ -28,18 +28,39 @@ const Main = () => {
             })
         }
 
-        const handlePicture = async () => {
-            if (canvasRemoteControl.current) {
-                try {
-                    // TODO: figure out blob or png and make an express server
-                    const dataUrl = await htmlToImage.toPng('img.png');
-                } catch (error) {
-                    console.error('poops', error);
+        const handleProcessing = async () => {
+            const node = canvasRemoteControl.current;
+
+            if (!node || !document.body.contains(node)) {
+                console.log('node is missing or detached');
+                return;
+            }
+
+            try {
+                const blob = await htmlToImage.toBlob(node, {
+                    cacheBust: true,
+                });
+
+                if (!blob) {
+                    console.log('no blob');
                 }
+
+                const formData = new FormData();
+                formData.append('screenshot', blob, 'capture.png');
+
+                const res = await fetch('http://localhost:3000/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await res.json();
+                console.log("upload worked: ", data);
+            } catch (error) {
+                console.error("image failure ", error);
             }
         };
 
-        const intervalId = setInterval(handlePicture, 2000);
+        const intervalId = setInterval(handleProcessing, 2000);
 
         return () => clearInterval(intervalId);
     }, []);
@@ -94,18 +115,18 @@ const Main = () => {
     /**
      * Take picture of canvas and send to backend
      */
-    setInterval(() => {
-        if (canvasRemoteControl.current == null) return null;
+    // setInterval(() => {
+    //     if (canvasRemoteControl.current == null) return null;
 
-        htmlToImage.toPng(canvasRemoteControl.current)
-            .then((dataUrl) => {
-                const link = document.createElement('a');
-                link.download = 'pic.png';
-                link.href = dataUrl;
-                link.click();
-            })
-            .catch((err) => console.error('interval image error'));
-    }, 1000);
+    //     htmlToImage.toPng(canvasRemoteControl.current)
+    //         .then((dataUrl) => {
+    //             const link = document.createElement('a');
+    //             link.download = 'pic.png';
+    //             link.href = dataUrl;
+    //             link.click();
+    //         })
+    //         .catch((err) => console.error('interval image error'));
+    // }, 1000);
 
     return (<>
         <div className="main-cont">
