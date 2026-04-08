@@ -3,12 +3,15 @@ import Canvas from "../components/canvas.jsx";
 import "../styles/main.css";
 import Words from "../assets/words/words.jsx";
 import * as htmlToImage from 'html-to-image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEraser, faFire } from '@fortawesome/free-solid-svg-icons';
 
 const Main = () => {
 
     const canvasRemoteControl = useRef();
     const heatmapInstance = useRef(null);
     const heatmapContainerRef = useRef(null);
+    const captureAreaRef = useRef(null);
 
     const [showWordScreen, setShowWordScreen] = useState(true);
     const [word, setWord] = useState('');
@@ -27,22 +30,27 @@ const Main = () => {
                 max: 20,
             })
         }
+    }, []);
 
+    useEffect(() => {
         const handleProcessing = async () => {
-            const node = canvasRemoteControl.current;
+            const node = captureAreaRef.current;
 
             if (!node || !document.body.contains(node)) {
-                console.log('node is missing or detached');
+                console.log('node missing/detached');
                 return;
             }
 
             try {
                 const blob = await htmlToImage.toBlob(node, {
                     cacheBust: true,
+                    skipAutoScale: true,
+                    pixelRatio: 1,
                 });
 
                 if (!blob) {
-                    console.log('no blob');
+                    console.log('no blobs');
+                    return;
                 }
 
                 const formData = new FormData();
@@ -54,16 +62,16 @@ const Main = () => {
                 });
 
                 const data = await res.json();
-                console.log("upload worked: ", data);
+                console.log('poggers');
             } catch (error) {
                 console.error("image failure ", error);
             }
         };
 
-        const intervalId = setInterval(handleProcessing, 2000);
+        const intervalId = setInterval(handleProcessing, 3000);
 
         return () => clearInterval(intervalId);
-    }, []);
+    }, [showWordScreen]);
 
     const handleClearReq = () => {
         if (canvasRemoteControl.current) {
@@ -112,22 +120,6 @@ const Main = () => {
 
     }
 
-    /**
-     * Take picture of canvas and send to backend
-     */
-    // setInterval(() => {
-    //     if (canvasRemoteControl.current == null) return null;
-
-    //     htmlToImage.toPng(canvasRemoteControl.current)
-    //         .then((dataUrl) => {
-    //             const link = document.createElement('a');
-    //             link.download = 'pic.png';
-    //             link.href = dataUrl;
-    //             link.click();
-    //         })
-    //         .catch((err) => console.error('interval image error'));
-    // }, 1000);
-
     return (<>
         <div className="main-cont">
             <div className={`show-word-screen ${showWordScreen ? 'active' : null}`}>
@@ -138,15 +130,17 @@ const Main = () => {
             <div className="main-inner-cont">
                 <h1>Google QuickDraw Clone</h1>
                 <div className="interactables-cont">
-                    <Canvas ref={canvasRemoteControl}/>
+                    <div ref={captureAreaRef}>
+                        <Canvas ref={canvasRemoteControl}/>
+                    </div>
                     <div ref={heatmapContainerRef} className="heatmap">
 
                     </div>
                 </div>
                 <div className="button-cont">
-                    <button onClick={handleClearReq}>Clear<i className="fa-solid fa-eraser"></i></button>
+                    <button onClick={handleClearReq}>Clear<FontAwesomeIcon icon={faEraser}></FontAwesomeIcon></button>
                     <button onClick={handleSubmit}>Submit</button>
-                    <button onClick={updateHeatmap}>Update Heatmap<i className="fa-solid fa-fire"></i></button>
+                    <button onClick={updateHeatmap}>Update Heatmap<FontAwesomeIcon icon={faFire}></FontAwesomeIcon></button>
                 </div>
             </div>
         </div>
