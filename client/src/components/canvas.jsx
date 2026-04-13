@@ -5,6 +5,9 @@ const Canvas = forwardRef((props, ref) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [points, setPoints] = useState([]);
 
+  const [history, setHistory] = useState([]);
+  const historyRef = useRef([]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -53,6 +56,10 @@ const Canvas = forwardRef((props, ref) => {
     setIsDrawing(false);
   };
 
+  const saveState = () => {
+    historyRef.current.push(canvasRef.current.toDataURL());
+  }
+
   useImperativeHandle(ref, () => ({
     clearCanvas: () => {
         const canvas = canvasRef.current;
@@ -61,7 +68,31 @@ const Canvas = forwardRef((props, ref) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         setPoints([]);
     },
-    getHeatmapData: () => points
+    getHeatmapData: () => points,
+    undoState: () => {
+      const canvas = canvasRef.current;
+      /** @type {CanvasRenderingContext2D} */
+      const ctx = canvas.getContext('2d');
+      const history = historyRef.current;
+      if (history.length < 2) {
+        if (history.length === 1) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          setHistory([]);
+        }
+        return;
+      }
+
+      history.pop();
+
+      const prevState = history[history.length - 1];
+
+      const img = new Image();
+      img.src = prevState;
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+      };
+    }
   }));
 
   return (
@@ -72,7 +103,10 @@ const Canvas = forwardRef((props, ref) => {
       style={{ border: '1px solid #000', cursor: 'crosshair', backgroundColor: "white" }}
       onMouseDown={startDrawing}
       onMouseMove={draw}
-      onMouseUp={stopDrawing}
+      onMouseUp={() => {
+        stopDrawing();
+        saveState();
+      }}
       onMouseLeave={stopDrawing}
     />
   );

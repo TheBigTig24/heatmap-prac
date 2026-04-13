@@ -4,7 +4,7 @@ import "../styles/main.css";
 import Words from "../assets/words/words.jsx";
 import * as htmlToImage from 'html-to-image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEraser, faFire } from '@fortawesome/free-solid-svg-icons';
+import { faEraser, faFire, faUndo } from '@fortawesome/free-solid-svg-icons';
 
 const Main = () => {
 
@@ -15,6 +15,7 @@ const Main = () => {
 
     const [showWordScreen, setShowWordScreen] = useState(true);
     const [word, setWord] = useState('');
+    const [prediction, setPrediction] = useState('');
 
     useEffect(() => {
         let idx = Math.floor(Math.random() * (Words.length + 1));
@@ -56,13 +57,14 @@ const Main = () => {
                 const formData = new FormData();
                 formData.append('screenshot', blob, 'capture.png');
 
-                const res = await fetch('http://localhost:3000/upload', {
+                const res = await fetch('https://code.notlaurence.org/proxy/8000/predict', {
                     method: 'POST',
                     body: formData
                 });
 
                 const data = await res.json();
-                console.log('poggers');
+                console.log(data);
+                setPrediction(data.prediction);
             } catch (error) {
                 console.error("image failure ", error);
             }
@@ -120,6 +122,41 @@ const Main = () => {
 
     }
 
+    useEffect(() => {
+        const prompt = word.toLowerCase().replace(/\s/g, '');
+        const predict = prediction.toLowerCase().replace(/\s/g, '');
+
+        if (prompt === predict) {
+            // get next word
+            let idx = Math.floor(Math.random() * (Words.length + 1));
+            while (Words[idx] == word) {
+                idx = Math.floor(Math.random() * (Words.length + 1));
+            }
+            setWord(Words[idx]);
+            setShowWordScreen(true);
+
+            // clear canvas and heatmap
+            if (canvasRemoteControl.current) {
+                canvasRemoteControl.current.clearCanvas();
+            }
+            if (heatmapInstance.current) {
+                heatmapInstance.current.setData({
+                    max: 0,
+                    data: []
+                });
+            }
+        }
+    }, [prediction]);
+
+    /**
+     * Handle Undo Logic
+     */
+    const handleUndo = () => {
+        if (canvasRemoteControl.current) {
+            canvasRemoteControl.current.undoState();
+        }
+    }
+
     return (<>
         <div className="main-cont">
             <div className={`show-word-screen ${showWordScreen ? 'active' : null}`}>
@@ -139,8 +176,11 @@ const Main = () => {
                 </div>
                 <div className="button-cont">
                     <button onClick={handleClearReq}>Clear<FontAwesomeIcon icon={faEraser}></FontAwesomeIcon></button>
-                    <button onClick={handleSubmit}>Submit</button>
+                    <button onClick={handleUndo}>Undo<FontAwesomeIcon icon={faUndo}></FontAwesomeIcon></button>
                     <button onClick={updateHeatmap}>Update Heatmap<FontAwesomeIcon icon={faFire}></FontAwesomeIcon></button>
+                </div>
+                <div>
+                    <h2>Prediction: <span>{prediction}</span></h2>
                 </div>
             </div>
         </div>
