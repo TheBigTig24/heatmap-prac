@@ -8,12 +8,12 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5174,
     strictPort: true,
-    allowedHosts: ['code.notlaurence.org'],
-    hmr: {
-      host: 'code.notlaurence.org',
-      path: '/proxy/5174/@vite/client', 
-      clientPort: 443,
-      protocol: 'wss',
-    }
+    allowedHosts: ['localhost'],
+    // hmr: {
+    //   host: 'code.notlaurence.org',
+    //   path: '/proxy/5174/@vite/client', 
+    //   clientPort: 443,
+    //   protocol: 'wss',
+    // }
   }
 })

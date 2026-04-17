@@ -89,7 +89,10 @@ const Main = ({ onExit }) => {
                 const formData = new FormData();
                 formData.append('screenshot', blob, 'capture.png');
 
-                const res = await fetch('https://code.notlaurence.org/proxy/8000/predict', {
+                // const url = 'https://code.notlaurence.org/proxy/8000/predict';
+                const url = 'http://localhost:8000/predict'
+
+                const res = await fetch(url, {
                     method: 'POST',
                     body: formData
                 });

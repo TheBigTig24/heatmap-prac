@@ -1,14 +1,24 @@
 import tensorflow as tf
 import numpy as np
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import cv2
 from datetime import datetime
 from class_names import class_names
 
-
-model = tf.keras.models.load_model('../models/model_epoch_05.keras')
+model = tf.keras.models.load_model('../models/models-3000/model_epoch_05.keras')
 
 app = FastAPI()
+
+origins = ['http://localhost:5174']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 @app.post("/predict")
 def predict(screenshot: UploadFile = File(...)):
