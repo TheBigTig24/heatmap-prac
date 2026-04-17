@@ -10,8 +10,6 @@
     flex-direction: row;
     transition: bottom 0.75s cubic-bezier(0.4, 0, 0.2, 1);
     bottom: 0vh;
-    z-index: 100;
-    position: relative;
 }
 
 .start-screen.active {
@@ -35,6 +33,7 @@
 
 .start-screen button:hover {
     background-color: goldenrod;
+    cursor: pointer;
 }
 
 .start-side {

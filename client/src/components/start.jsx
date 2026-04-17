@@ -3,16 +3,10 @@ import "../styles/start.css";
 import DSAI from "../assets/logos/cpp_ds_ai_logo.png";
 import CSS from "../assets/logos/cpp_css_logo.png";
 
-const Start = () => {
+const Start = ({ displayValue, onStartBtn }) => {
 
-    const [screenUp, setScreenUp] = useState(false);
-    
-    useEffect(() => {
-        console.log(screenUp);
-    }, [screenUp]);
-    
     return(<>
-        <div className={`start-screen ${screenUp ? 'active' : ''}`}>
+        <div className={`start-screen ${displayValue ? 'active' : ''}`}>
             <div className="dsai start-side">
                 <div className="right-side">
                     <img src={DSAI}></img>
@@ -29,7 +23,7 @@ const Start = () => {
                     <h1>Presented by DSAI and CSS</h1>
                 </div>
             </div>
-            <button onClick={() => setScreenUp(!screenUp)}>Start!</button>
+            <button onClick={() => onStartBtn()}>Start!</button>
         </div>
     </>);
 };

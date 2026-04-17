@@ -6,6 +6,7 @@
     justify-content: flex-start;
     align-items: center;
     background-color: lightgreen;
+    position: relative;
 }
 
 .main-inner-cont {
@@ -15,7 +16,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    background-color: lightgreen;
+    background-color: rgb(102, 197, 102);
 }
 
 .interactables-cont {
@@ -88,4 +89,101 @@
 
 .start-draw:hover {
     background-color: goldenrod;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+}
+
+.modal-open {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.modal-open button {
+    background-color: transparent;
+    border: none;
+    padding: 1rem;
+}
+
+.fa-info-circle {
+    height: 22px;
+    width: auto;
+}
+
+.fa-exit {
+    height: 22px;
+    width: auto;
+}
+
+.modal-open button:hover {
+    cursor: pointer;
+}
+
+.exit-game {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.exit-game button {
+    background-color: transparent;
+    border: none;
+    padding: 1rem;
+}
+
+.exit-game button:hover {
+    cursor: pointer;
+}
+
+.dialog {
+    position: relative;
+    z-index: 50;
+}
+
+.dialog-cont {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    width: 100vw;
+    height: 100vh;
+}
+
+.dialog-panel {
+    max-width: 512px;
+    border: 2px solid rgb(10, 83, 10);
+    border-radius: 10px;
+    background-color: rgb(83, 209, 83);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog-title {
+    font-weight: bold;
+    font-size: 30px;
+    margin: 0;
+}
+
+.dialog-desc {
+    font-size: 20px;
+}
+
+.dialog-exit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: .5rem;
+}
+
+.dialog-exit:hover {
+    cursor: pointer;
 }

@@ -16,7 +16,7 @@ const Canvas = forwardRef((props, ref) => {
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.strokeStyle = 'black';
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 15;
   }, []);
 
   const startDrawing = ({ nativeEvent }) => {
@@ -92,6 +92,9 @@ const Canvas = forwardRef((props, ref) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0);
       };
+    },
+    clearHistory: () => {
+      setHistory([]);
     }
   }));
 
